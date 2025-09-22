@@ -7,6 +7,11 @@ import time
 from docx import Document
 from docx.shared import Inches
 import tempfile
+import plotly.io as pio
+
+# Opsional: set default format agar tidak perlu menulis format setiap kali
+pio.kaleido.scope.default_format = "png"
+
 
 # --- KONFIGURASI ---
 st.set_page_config(page_title="SCRAPING PRODUK TOKOPEDIA", layout="wide")
