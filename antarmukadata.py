@@ -9,8 +9,6 @@ from docx.shared import Inches
 import tempfile
 import plotly.io as pio
 
-# Opsional: set default format agar tidak perlu menulis format setiap kali
-pio.kaleido.scope.default_format = "png"
 
 
 # --- KONFIGURASI ---
@@ -85,7 +83,7 @@ df = pd.read_excel(file_path)
 
 # --- 1. DATA AWAL ---
 st.subheader("Data Awal")
-st.dataframe(df, use_container_width=True)
+st.dataframe(df, width="stretch")
 
 # --- 2. FILTER PERTAMA ---
 col1, col2, col3 = st.columns(3)
@@ -283,11 +281,11 @@ if y_col and not final_df.empty:
         xaxis=dict(tickangle=-45, automargin=True),
         yaxis=dict(automargin=True)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # --- Download PNG ---
     buf = io.BytesIO()
-    fig.write_image(buf, format="png")
+    fig.write_image(buf, format="png", engine="orca")
     st.download_button("📥 Download Grafik (PNG)", buf.getvalue(), "grafik_tokopedia.png", "image/png")
 
     # --- Download HTML ---
@@ -347,7 +345,7 @@ def create_docx(dataframe, fig, total_toko, total_produk, value_option, order_op
     # --- Grafik hanya kalau ada fig ---
     if fig is not None:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmpfile:
-            fig.write_image(tmpfile.name, format="png")
+            fig.write_image(tmpfile.name, format="png", engine="orca")
             doc.add_heading("📊 Visualisasi Grafik", level=1)
             doc.add_picture(tmpfile.name, width=Inches(6))
     else:
